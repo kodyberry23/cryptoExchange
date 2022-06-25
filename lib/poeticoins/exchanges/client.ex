@@ -106,7 +106,7 @@ defmodule Poeticoins.Exchanges.Client do
       else: {:error, {required_key, :required}}
   end
 
-  ################### Private Functions ################################
+  ################### Private Functions ###################
   defp server_host(module), do: module.server_host()
   defp server_port(module), do: module.server_port()
 

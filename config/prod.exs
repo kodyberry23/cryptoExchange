@@ -10,26 +10,35 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :poeticoins, PoeticoinsWeb.Endpoint,
+  url: [host: "poeticoins-app-kody.gigalixirapp.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :poeticoins, :children, [
+  PoeticoinsWeb.Telemetry,
+  {Phoenix.PubSub, name: Poeticoins.PubSub},
+  {Poeticoins.Historical, name: Poeticoins.Historical},
+  {Poeticoins.Exchanges.Supervisor, name: Poeticoins.Exchanges.Supervisor},
+  PoeticoinsWeb.Endpoint
+]
 
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
 # to the previous section and set your `:url` port to 443:
 #
-#     config :poeticoins, PoeticoinsWeb.Endpoint,
-#       ...,
-#       url: [host: "example.com", port: 443],
-#       https: [
-#         ...,
-#         port: 443,
-#         cipher_suite: :strong,
-#         keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-#         certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
-#       ]
+# config(:poeticoins, PoeticoinsWeb.Endpoint, ...,
+#   url: [host: "poeticoins-app-kody.gigalixirapp.com", port: 443],
+#   https: [
+#     ...,
+#     port: 443,
+#     cipher_suite: :strong,
+#     keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
+#     certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
+#   ]
+# )
 #
 # The `cipher_suite` is set to `:strong` to support only the
 # latest and more secure SSL ciphers. This means old browsers

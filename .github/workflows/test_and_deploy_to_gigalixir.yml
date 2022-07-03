@@ -18,6 +18,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.16.0
+    - name: Install deps
+      run: |
+        mix deps.get
+        npm install --prefix assets
         
     - run: mix test
   deploy:

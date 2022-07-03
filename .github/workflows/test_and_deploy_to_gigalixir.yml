@@ -2,20 +2,18 @@ name: Test and Deploy
 on: push
 
 jobs:
-  test:
+  test: 
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        otp: [24]
+        otp: [23.3.2]
         elixir: [1.13.3]
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-elixir@v1
       with: 
         otp-version: ${{ matrix.otp }}
         elixir-version: ${{ matrix.elixir }}
-
     - name: Setup Node
       uses: actions/setup-node@v1
       with:
@@ -43,23 +41,22 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('assets/**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-
     - name: Install deps
       run: |
         mix deps.get
         npm install --prefix assets
+        
     - run: mix test
-
-    deploy:
+  deploy:
     needs: test
     
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
     steps:
     
     - uses: actions/checkout@v2
       with:
-        ref: main
+        ref: master
         fetch-depth: 0
     
     - uses: actions/setup-python@v2
